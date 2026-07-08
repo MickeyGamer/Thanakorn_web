@@ -10,25 +10,37 @@ export default function Register() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  
+  // State สำหรับเก็บข้อความ Error เพื่อใช้แสดง Popup
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage(""); // เคลียร์ error ก่อนเริ่ม submit
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-    if (res.ok) {
-      setIsSuccess(true);
-      
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
-      
-    } else {
-      alert("การสมัครสมาชิกผิดพลาด โปรดลองใหม่อีกครั้ง");
+      if (res.ok) {
+        setIsSuccess(true);
+        
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
+        
+      } else {
+        setErrorMessage("การสมัครสมาชิกผิดพลาด ข้อมูลไม่ถูกต้องหรืออีเมลนี้อาจมีในระบบแล้ว");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setErrorMessage("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ โปรดตรวจสอบอินเทอร์เน็ต");
       setIsLoading(false);
     }
   }
@@ -81,6 +93,23 @@ export default function Register() {
           <Link href="/login" className="auth-link">เข้าสู่ระบบที่นี่</Link>
         </div>
       </form>
+
+      {/* ✨ ปรับปรุงใหม่: เปลี่ยนจาก style เป็น className ทั้งชุด */}
+      {errorMessage && (
+        <div className="popup-overlay">
+          <div className="popup-card">
+            <div className="popup-icon">❌</div>
+            <h3 className="popup-title">เกิดข้อผิดพลาด</h3>
+            <p className="popup-text">{errorMessage}</p>
+            <button 
+              className="btn-popup-close" 
+              onClick={() => setErrorMessage("")} // ปิด popup โดยการเคลียร์ state
+            >
+              ตกลง
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

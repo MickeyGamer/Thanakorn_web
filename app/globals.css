@@ -19,7 +19,6 @@ body {
 }
 
 .navbar {
-  /* ไล่สีพื้นหลังแถบเมนูจาก น้ำเงินเข้ม ไป ฟ้า */
   background: linear-gradient(135deg, #1e3a8a, #3b82f6); 
   padding: 14px 24px;
   position: sticky;
@@ -113,7 +112,7 @@ body {
 
 .pos-card {
   background: #ffffff;
-  border-top: 4px solid #3b82f6; /* ขอบบนสีฟ้าเด่นๆ */
+  border-top: 4px solid #3b82f6;
   border-radius: 12px;
   padding: 32px;
   margin-bottom: 24px;
@@ -222,6 +221,7 @@ body {
 
 .btn-submit:active {
   transform: translateY(0);
+  transform: scale(0.96);
 }
 
 .auth-footer {
@@ -281,12 +281,87 @@ body {
   to { transform: rotate(360deg); }
 }
 
-.btn-submit:active {
-  transform: scale(0.96);
-}
-
 .btn-submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: popupFadeIn 0.2s ease-out;
+}
+
+.popup-card {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: popupScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.popup-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.popup-title {
+  margin: 0 0 8px 0;
+  color: #1e293b;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.popup-text {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.btn-popup-close {
+  width: 100%;
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+}
+
+.btn-popup-close:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-popup-close:active {
+  transform: scale(0.98);
+}
+
+@keyframes popupFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupScaleUp {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

@@ -8,22 +8,33 @@ export default function Login() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage("");
 
-    await new Promise(resolve => setTimeout(resolve, 800));
+    try {
+      await new Promise(resolve => setTimeout(resolve, 800));
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(form),
-    });
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-    if (res.ok) {
-      window.location.href = "/dashboard"; 
-    } else {
-      alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+      if (res.ok) {
+        window.location.href = "/dashboard"; 
+      } else {
+        setErrorMessage("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setErrorMessage("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ โปรดตรวจสอบอินเทอร์เน็ต");
       setIsLoading(false);
     }
   }
@@ -76,6 +87,22 @@ export default function Login() {
           <Link href="/register" className="auth-link">สมัครสมาชิก</Link>
         </div>
       </form>
+
+        {errorMessage && (
+        <div className="popup-overlay">
+            <div className="popup-card">
+            <div className="popup-icon">❌</div>
+            <h3 className="popup-title">เข้าสู่ระบบไม่สำเร็จ</h3>
+            <p className="popup-text">{errorMessage}</p>
+            <button 
+                className="btn-popup-close" 
+                onClick={() => setErrorMessage("")}
+            >
+                ตกลง
+            </button>
+            </div>
+        </div>
+        )}
     </div>
   );
 }
